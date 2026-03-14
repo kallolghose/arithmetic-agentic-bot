@@ -1,3 +1,4 @@
+from langchain_ollama import ChatOllama
 from langgraph.types import Command, interrupt
 from langchain_core.tools import tool
 from langchain.chat_models import init_chat_model
@@ -5,6 +6,7 @@ from dotenv import load_dotenv
 import streamlit as st
 from langgraph.checkpoint.memory import InMemorySaver
 from agent_utilities import create_agent, run_agent, resume_agent
+import os
 
 GLOBAL_STATE = []
 
@@ -82,11 +84,17 @@ if "agent" not in st.session_state:
 
 ### What to be done via session state
 if st.session_state.agent_state != "WAITING_FOR_HUMAN":
-    model = init_chat_model(
-        "openai:gpt-4o-mini",
-        temperature=0
-    )
-    checkpointer = InMemorySaver()
+    if os.getenv("OPENAI_API_KEY"):
+        model = init_chat_model(
+            "openai:gpt-4o-mini",
+            temperature=0
+        )
+        checkpointer = InMemorySaver()
+    if os.getenv("OLLAMA_BASE_URL"):
+        ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        ollama_model = os.getenv("OLLAMA_MODEL", "llama3.1")
+        model = ChatOllama(model=ollama_model, base_url=ollama_url, temperature=0)
+        checkpointer = InMemorySaver()
     # Tool list
     arithmeticagent_tools = [addition, subtraction, multiplication, division, human_assistance]
     arithmeticagent_system_prompt = """You are a mathematics agent that can solve simple mathematics problems like addition, subtraction, multiplication and division. 
