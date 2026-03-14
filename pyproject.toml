@@ -1,0 +1,18 @@
+[project]
+name = "pdc-langgraph-chatbot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "grandalf>=0.8",
+    "ipython>=9.5.0",
+    "langchain-community>=0.3.29",
+    "langchain-ollama>=0.3.7",
+    "langchain[openai]>=0.3.27",
+    "langgraph>=0.6.6",
+    "python-dotenv>=1.1.1",
+    "streamlit>=1.49.1",
+    "uvicorn>=0.35.0",
+]
